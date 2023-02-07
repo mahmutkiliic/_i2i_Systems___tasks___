@@ -1,0 +1,98 @@
+--question 1
+SELECT FIRST_NAME, LAST_NAME, DEPARTMENT_NAME  
+FROM HR.Employees 
+INNER JOIN HR.Departments 
+on HR.Employees.DEPARTMENT_ID = HR.Departments.DEPARTMENT_ID;
+--output
+
+
+--question 2
+SELECT e1.EMPLOYEE_ID, e2.MANAGER_ID 
+FROM HR.Employees e1, HR.Employees e2
+WHERE e1.manager_id = e2.employee_id;
+--output
+
+
+--question 3.1
+select substr(PHONE_NUMBER,1,3) as "Operator" , count(EMPLOYEE_ID) as "Total"
+from HR.Employees
+group by substr(PHONE_NUMBER,1,3)
+--output
+
+--question 3.2
+--I couldn't reach the expected output.
+
+
+--question 4
+-----------------------------------------------
+-- first I used 'describe' statement to obtain 
+--columns' data types of HR.Employees table
+-----------------------------------------------
+describe HR.Employees
+
+--creating table EMP
+create table EMP 
+(
+    employee_id number(6) NOT NULL,  
+    FIRST_NAME varchar2(20)	,
+    LAST_NAME varchar2(25) NOT NULL	,
+    EMAIL varchar2(25) NOT NULL	,
+    PHONE_NUMBER varchar2(20) 	,
+    HIRE_DATE DATE not null	,
+    JOB_ID VARCHAR2(10) NOT NULL	,
+    SALARY NUMBER(8,2)	,
+    COMMISSION_PCT NUMBER(2,2)	,
+    MANAGER_ID NUMBER(6,0)	,
+    DEPARTMENT_ID NUMBER(4,0)
+);
+
+
+--inserting a row to database
+insert into EMP(employee_id,  
+    FIRST_NAME,
+    LAST_NAME,
+    EMAIL	,
+    PHONE_NUMBER	,
+    HIRE_DATE	,
+    JOB_ID ,
+    SALARY	,
+    --COMMISSION_PCT 	,
+    MANAGER_ID 	,
+    DEPARTMENT_ID 
+)
+values
+(152199,'Mahmut','Kilic','mahmut@mail.com','5369999',
+TO_DATE('2020-12-20','YYYY-MM-DD'),258,25000,  102,60)
+
+
+--updating the row with a where condition with Employee's id.
+UPDATE    EMP
+SET
+    PHONE_NUMBER = '5158885555',
+    SALARY = 15000       
+WHERE
+    EMPLOYEE_ID=152199;
+
+
+--table's display
+SELECT * FROM EMP
+
+
+--deleting selected employee with its id.
+DELETE FROM EMP
+WHERE
+    EMPLOYEE_ID=152199 ;
+
+--table's display
+SELECT * FROM EMP
+
+
+DROP TABLE EMP;
+
+
+--question 5
+SELECT
+(INITCAP(SUBSTR( FIRST_NAME, 1,2 )) || REGEXP_REPLACE(SUBSTR(FIRST_NAME,3), '\w', '*'))
+||' '|| INITCAP(SUBSTR( LAST_NAME, 1,2 )) || REGEXP_REPLACE(SUBSTR(LAST_NAME,3), '\w', '*') 
+AS FullName  
+FROM HR.Employees
